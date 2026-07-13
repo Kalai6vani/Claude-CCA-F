@@ -1,3 +1,37 @@
+#Helper functions to maintain MULTI - TURN CONVERSATION
+def add_user_message(messages, text):
+  user_message = {"role": "user", "content": text}
+  messages.append(user_message)
+
+def add_assistant_message(messages, text):
+  assistant_message = {"role": "assistant", "content": text}
+  messages.append(assistant_message)
+
+def chat(messages, system=None):
+  #system=None ---- works with a system prompt if one is present or continues
+  params = {
+    "model": model,
+    "max_tokens": 1000,
+    "messages": messages,
+  }
+
+  if system:
+    params["system"] = system
+    
+  message = client.messages.create(**params)
+  return message.content[0].text
+
+#-------------------------main-------------------------------
 messages = []
 
-add_user_message(messages, "Write a Python function that checks a string for duplicate characters.",)
+system = """
+  You are a Python engineer who writes very concise code.
+  """
+
+add_user_message(
+  messages, 
+  "Write a Python function that checks a string for duplicate characters.",
+)
+
+answer = chat(messages, system=system)
+#answer = chat(messages)
