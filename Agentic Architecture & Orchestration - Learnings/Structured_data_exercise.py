@@ -1,3 +1,12 @@
+# Load env variables and create client
+from dotenv import load_dotenv
+from anthropic import Anthropic
+
+load_dotenv()
+
+client = Anthropic()
+model = "claude-haiku-4-5"
+
 #Helper functions to maintain MULTI - TURN CONVERSATION
 def add_user_message(messages, text):
   user_message = {"role": "user", "content": text}
