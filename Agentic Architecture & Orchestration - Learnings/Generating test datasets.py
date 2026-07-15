@@ -1,3 +1,12 @@
+'''
+GOAL : Write a prompt that will assist users in writing Python code, JSON config,
+or Regular Expressions focused on AWS-specific use cases
+
+INPUT: User will request code for a specific task
+
+OUTPUT: Python, JSON, or a regular expression without any explanation
+'''
+
 # Load env variables and create client
 from dotenv import load_dotenv
 from anthropic import Anthropic
