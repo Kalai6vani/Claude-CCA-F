@@ -189,5 +189,47 @@ get_current_datetime_schema = ToolParam({
 })
 
 #STEP 3 - CALL CLAUDE WITH JSON SCHEMA
+messages = []
+messages.append(
+    {
+        "role": "user",
+        "content": "What is the exact time, formatted as HH:MM:SS?"
+    }
+)
+
+response = client.messages.create(
+    model=model,
+    max_tokens=1000,
+    messages=messages,
+    tools=[get_current_datetime_schema],
+)
+
+messages.append({
+    "role": "assistant",
+    "content": response.content
+})
+#printing messages will now return all blocks of response - because claude is
+#incapable of maintaining memory of the previous messages
+
 #STEP 4 - RUN TOOL
+result = get_current_datetime(**response.content[1].input)
+
 #STEP 5 - ADD TOOL RESULT AND CALL CLAUDE AGAIN
+messages.append({
+    "role": "user",
+    "content": [
+        {
+            "type": "tool_result",
+            "tool_use_id": response.content[1].id,
+            "content": result,
+            "is_error": False
+        }
+    ]
+})
+
+client.messages.create(
+    model=model,
+    max_tokens=1000,
+    messages=messages,
+    tools=[get_current_datetime_schema]
+)
